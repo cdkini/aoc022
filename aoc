@@ -1,0 +1,40 @@
+#!/usr/bin/python3
+import pathlib
+import sys
+
+TEMPLATE = """def read_input():
+    with open("input.txt") as f:
+        contents = f.read().strip()
+    return contents
+
+
+def part_one():
+    return "Not Implemented"
+
+
+def part_two():
+    return "Not Implemented"
+
+
+if __name__ == "__main__":
+    print(f"Part One: {part_one()}")
+    print(f"Part Two: {part_two()}")
+"""
+
+
+def main():
+    day = f"day{sys.argv[1].zfill(2)}"
+
+    directory = pathlib.Path(day)
+    directory.mkdir()
+
+    py_file = directory.joinpath(f"{day}.py")
+    with py_file.open("w") as f:
+        f.write(TEMPLATE)
+
+    input_file = directory.joinpath("input.txt")
+    input_file.touch()
+
+
+if __name__ == "__main__":
+    main()
