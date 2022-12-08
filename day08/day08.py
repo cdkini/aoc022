@@ -47,37 +47,37 @@ class Forest:
             score *= _score
         return score
 
-    def _check_left(self, r: int, c: int) -> Tuple[int, bool]:
+    def _check_x(
+        self, r: int, c: int, start: int, stop: int, step: int
+    ) -> Tuple[int, bool]:
         count = 0
-        for i in range(c - 1, -1, -1):
+        for i in range(start, stop, step):
             count += 1
             if self.matrix[r][i] >= self.matrix[r][c]:
                 return count, False
         return count, True
 
+    def _check_left(self, r: int, c: int) -> Tuple[int, bool]:
+        return self._check_x(r=r, c=c, start=c - 1, stop=-1, step=-1)
+
     def _check_right(self, r: int, c: int) -> Tuple[int, bool]:
+        return self._check_x(r=r, c=c, start=c + 1, stop=len(self.matrix[0]), step=1)
+
+    def _check_y(
+        self, r: int, c: int, start: int, stop: int, step: int
+    ) -> Tuple[int, bool]:
         count = 0
-        for i in range(c + 1, len(self.matrix[0])):
+        for i in range(start, stop, step):
             count += 1
-            if self.matrix[r][i] >= self.matrix[r][c]:
+            if self.matrix[i][c] >= self.matrix[r][c]:
                 return count, False
         return count, True
 
     def _check_up(self, r: int, c: int) -> Tuple[int, bool]:
-        count = 0
-        for i in range(r - 1, -1, -1):
-            count += 1
-            if self.matrix[i][c] >= self.matrix[r][c]:
-                return count, False
-        return count, True
+        return self._check_y(r=r, c=c, start=r - 1, stop=-1, step=-1)
 
     def _check_down(self, r: int, c: int) -> Tuple[int, bool]:
-        count = 0
-        for i in range(r + 1, len(self.matrix)):
-            count += 1
-            if self.matrix[i][c] >= self.matrix[r][c]:
-                return count, False
-        return count, True
+        return self._check_y(r=r, c=c, start=r + 1, stop=len(self.matrix), step=1)
 
 
 def read_input() -> List[List[int]]:
