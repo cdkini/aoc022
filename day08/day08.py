@@ -1,4 +1,10 @@
+import enum
 from typing import List, Tuple
+
+
+class Direction(enum.Enum):
+    X = "x"
+    Y = "y"
 
 
 class Forest:
@@ -47,37 +53,44 @@ class Forest:
             score *= _score
         return score
 
-    def _check_x(
-        self, r: int, c: int, start: int, stop: int, step: int
+    def _check_direction(
+        self, r: int, c: int, start: int, stop: int, step: int, direction: Direction
     ) -> Tuple[int, bool]:
         count = 0
         for i in range(start, stop, step):
             count += 1
-            if self.matrix[r][i] >= self.matrix[r][c]:
-                return count, False
+            if direction is Direction.X:
+                if self.matrix[r][i] >= self.matrix[r][c]:
+                    return count, False
+            else:
+                if self.matrix[i][c] >= self.matrix[r][c]:
+                    return count, False
         return count, True
 
     def _check_left(self, r: int, c: int) -> Tuple[int, bool]:
-        return self._check_x(r=r, c=c, start=c - 1, stop=-1, step=-1)
+        return self._check_direction(
+            r=r, c=c, start=c - 1, stop=-1, step=-1, direction=Direction.X
+        )
 
     def _check_right(self, r: int, c: int) -> Tuple[int, bool]:
-        return self._check_x(r=r, c=c, start=c + 1, stop=len(self.matrix[0]), step=1)
-
-    def _check_y(
-        self, r: int, c: int, start: int, stop: int, step: int
-    ) -> Tuple[int, bool]:
-        count = 0
-        for i in range(start, stop, step):
-            count += 1
-            if self.matrix[i][c] >= self.matrix[r][c]:
-                return count, False
-        return count, True
+        return self._check_direction(
+            r=r,
+            c=c,
+            start=c + 1,
+            stop=len(self.matrix[0]),
+            step=1,
+            direction=Direction.X,
+        )
 
     def _check_up(self, r: int, c: int) -> Tuple[int, bool]:
-        return self._check_y(r=r, c=c, start=r - 1, stop=-1, step=-1)
+        return self._check_direction(
+            r=r, c=c, start=r - 1, stop=-1, step=-1, direction=Direction.Y
+        )
 
     def _check_down(self, r: int, c: int) -> Tuple[int, bool]:
-        return self._check_y(r=r, c=c, start=r + 1, stop=len(self.matrix), step=1)
+        return self._check_direction(
+            r=r, c=c, start=r + 1, stop=len(self.matrix), step=1, direction=Direction.Y
+        )
 
 
 def read_input() -> List[List[int]]:
